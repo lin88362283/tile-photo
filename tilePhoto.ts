@@ -1,15 +1,19 @@
 import sharp from "sharp";
-import { TILELENGTH } from "./constants";
 import fs from 'fs';
+import { computeRegion } from "./utils";
 
 /**
  * compress a photo and crop it into a bunch of tiles.
- * @param imageUrl url of a photo.
+ * @param imagePath path of a image.
  * @param tileLength length of tile(optional, default 256).
- * @throws {Error}
+ * @throws {Error} Invalid parameters
  */
-const tilePhoto = async (imageUrl: string, tileLength: number = TILELENGTH): Promise<void> => {
-	const image = sharp(imageUrl);
+const tilePhoto = async (imagePath: string, tileLength: number): Promise<void> => {
+	if (!(tileLength > 0)) {
+		console.error('Please input correct tile length! By default it is 256')
+		return
+	}
+	const image = sharp(imagePath);
 	const { height, width } = await image.metadata();
 	const levelNumber = 1 + Math.log2(Math.max(height, width))
 	for (let l = 0; l < levelNumber; l++) {
@@ -21,8 +25,8 @@ const tilePhoto = async (imageUrl: string, tileLength: number = TILELENGTH): Pro
 		const columnNumber = Math.floor(compressedWidth / tileLength) || 1;
 		// compress the image
 		const compressedImage = image.resize({ width: compressedWidth, height: compressedHeight })
-		// init directory for tiles
-		const dir = `./output/${imageUrl}_${l}`;
+		// init directory for generated images
+		const dir = `./output/${imagePath}_${l}`;
 		if (fs.existsSync(dir)) {
 			fs.rmSync(dir, { recursive: true, force: true });
 		}
@@ -30,26 +34,15 @@ const tilePhoto = async (imageUrl: string, tileLength: number = TILELENGTH): Pro
 		//crop the image as a couple of tiles and output them
 		for (let r = 0; r < rowNumber; r++) {
 			for (let c = 0; c < columnNumber; c++) {
-				const xCoordinate = c * tileLength
-				const yCoordinate = r * tileLength
-				// use image length instead of tile length if image length is shorter than tile length.
-				const region = {
-					top: yCoordinate,
-					left: xCoordinate,
-					width: Math.min(tileLength, compressedWidth),
-					height: Math.min(tileLength, compressedHeight)
-				}
-				//TODO: README requires file name as "L/x_y.jpg", while "/" is strongly not recommended in a file name. Here use \uFF0F.
+				const region = computeRegion(c, r)(compressedHeight, compressedWidth)(tileLength)
+				// README requires file name as "L/x_y.jpg", while "/" is strongly not recommended in a file name. Here use \uFF0F.
 				compressedImage.extract(region)
-					.toFile(`${dir}/${l}\uFF0F${xCoordinate}_${yCoordinate}.jpg`)
-					.catch(err => { console.error(err) });
+					.toFile(`${dir}/${l}\uFF0F${region.left}_${region.top}.jpg`)
+					.catch((err: Error) => { console.error(err) });
 			}
 		}
 
 	}
 }
 
-
-
 export default tilePhoto;
-
