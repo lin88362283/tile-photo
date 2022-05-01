@@ -1,16 +1,17 @@
 # Image tiler
 The typical use case for this Node.js application is to generate tiles on different resolution levels from a given image.
 
-## prerequisite
+## Prerequisite
 DOCKER :)
 
 ## Examples
-`cd /into/this/project/directory`
+```
+cd /into/this/project/directory
 
-`docker build -t tile-photo . `
+docker build -t tile-photo . 
 
-`make tilePhoto imagePath=Cat.jpg tileLength=200(optional, 256 by default)`
-
+make tilePhoto imagePath=Cat.jpg tileLength=200(optional, 256 by default)
+```
 ## Problem description
 
 Our visualiser has a feature that allows customers to view the source photos that they uploaded as part of a survey. One survey may consist of several thousand large (30+ MB) photos. To make viewing snappy, we cut each photo up into tiles. Tiles are then generated for the photo at full resolution, at 1⁄2 resolution, at 1⁄4 resolution, at 1⁄8 resolution, and so on, until the photo cannot be shrunk further (i.e. its resolution is 1 × 1). For a photo with the resolution n × m, there will be
