@@ -1,5 +1,5 @@
 currentDir ?= $(shell pwd)
 
-generateTiles:
+tilePhoto:
 	docker run -v $(currentDir):/tile-photo/output tile-photo $(imagePath) $(tileLength)
 	

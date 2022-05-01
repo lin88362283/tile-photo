@@ -1,4 +1,13 @@
 # Image tiler
+The typical use case for this Node.js application is to generate tiles on different resolution levels from a given image.
+
+## prerequisite
+DOCKER :)
+
+## Examples
+`cd /into/this/project/directory`
+`docker build -t tile-photo . `
+`make tilePhoto imagePath=Cat.jpg tileLength=200(optional, 256 by default)`
 
 ## Problem description
 
