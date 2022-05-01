@@ -7,9 +7,7 @@ DOCKER :)
 ## Examples
 ```
 cd /into/this/project/directory
-
 docker build -t tile-photo . 
-
 make tilePhoto imagePath=Cat.jpg tileLength=200(optional, 256 by default)
 ```
 ## Problem description
