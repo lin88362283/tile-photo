@@ -1,5 +1,5 @@
 import sharp from "sharp";
-import fs from 'fs';
+import fs from "fs";
 import { computeRegion } from "./utils";
 
 /**
@@ -10,7 +10,7 @@ import { computeRegion } from "./utils";
  */
 const tilePhoto = async (imagePath: string, tileLength: number): Promise<void> => {
 	if (!(tileLength > 0)) {
-		console.error('Please input correct tile length! By default it is 256')
+		console.error("Please input correct tile length! By default it is 256")
 		return
 	}
 	const image = sharp(imagePath);
@@ -41,7 +41,6 @@ const tilePhoto = async (imagePath: string, tileLength: number): Promise<void> =
 					.catch((err: Error) => { console.error(err) });
 			}
 		}
-
 	}
 }
 

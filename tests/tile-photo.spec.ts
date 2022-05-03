@@ -1,6 +1,6 @@
-import 'mocha';
+import "mocha";
 import { expect } from "chai";
-import { computeRegion } from '../utils';
+import { computeRegion } from "../utils";
 
 describe("compute region function test", () => {
 	it("should be able to compute correct region top", () => {
